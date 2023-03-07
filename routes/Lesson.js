@@ -10,16 +10,16 @@ router.get("/", auth, (req, res) => {
 router.post("/generate", auth, async(req, res, next) => {
     const {subject , theme} = req.body
     if(!subject || !theme){
-        return res.status(500).json({
+        res.status(500).json({
             error: "Veuillez definir les champs 'subject' et 'theme' dans le corps de la requete."
         })
     }
     try{
         const generatedLevelTest = await lessonService.generateLessons(subject,theme)
-        return res.send(generatedLevelTest)
+        res.send(generatedLevelTest)
     }catch(err){
         console.log(err)
-        return res.status(500).json({
+        res.status(500).json({
             error: err.toString()
         })
     }

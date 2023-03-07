@@ -16,7 +16,7 @@ router.post("/generate", auth, async(req, res, next) => {
     }
     try{
         const generatedLevelTest = await levelTestService.generateLevelTest(subject,theme)
-        return res.send(generatedLevelTest)
+        res.send(generatedLevelTest)
     }catch(err){
         console.log(err)
         return res.status(500).json({
