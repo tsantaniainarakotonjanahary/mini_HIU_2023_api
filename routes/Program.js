@@ -4,27 +4,8 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require("mongodb").ObjectId;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const auth = require('../authentification/auth')
 
-function auth(req, res, next) 
-{
-    const token = req.header('x-auth-token');
-    if (!token) 
-    {
-        return res.status(401).json({ message: 'Aucun token, autorisation refusée' });
-    }
-
-    try 
-    {
-        const decoded = jwt.verify(token, "Tsanta");
-        req.user = decoded;
-        next();
-    } 
-    catch (err) 
-    {
-        res.status(400).json({ message: 'Token non valide' });
-    }
-}
- 
 router.post('/', auth, async function(req, res, next) {
     const etudiantId = req.user.id;
     const numJour = req.body.numJour;
