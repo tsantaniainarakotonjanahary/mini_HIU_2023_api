@@ -62,6 +62,26 @@ router.post('/', auth, async function(req, res, next) {
      client.close();
   });
 
+  
+router.delete('/', auth, async function(req, res, next) {
+    const etudiantId = req.user.id;
+    const idProgram = req.body.idProgram;
+  
+    const client = new MongoClient('mongodb+srv://tsanta:ETU001146@cluster0.6oftdrm.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true });
+    await client.connect();
+    const db = client.db("hiu");
+  
+    const result = await db.collection("program").deleteOne({ _id: new ObjectId(idProgram), etudiantId });
+  
+    if (result.deletedCount === 1) {
+      res.status(200).json({ message: "Programme supprimé de l'emploi du temps" });
+    } else {
+      res.status(404).json({ message: "Programme non trouvé ou n'appartient pas à l'étudiant connecté" });
+    }
+  
+    client.close();
+  });
+
   module.exports = router;
   
   
