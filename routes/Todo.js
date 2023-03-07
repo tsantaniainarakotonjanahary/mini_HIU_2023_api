@@ -80,7 +80,7 @@ router.put('/:id', auth, async function(req, res, next) {
   const updatedTodo = {
       tache: req.body.tache
   };
-  const result = await db.collection("todo").updateOne({ _id: ObjectId(todoId), etudiantId: etudiantId }, { $set: updatedTodo });
+  const result = await db.collection("todo").updateOne({ _id: new ObjectId(todoId), etudiantId: etudiantId }, { $set: updatedTodo });
   if (result.modifiedCount === 0) {
       return res.status(404).json({ message: "Todo non trouvé" });
   }

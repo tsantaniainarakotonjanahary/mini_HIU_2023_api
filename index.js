@@ -7,7 +7,8 @@ var etudiantRouter = require('./routes/Etudiant');
 var programRouter = require('./routes/Program');
 var todoRouter = require('./routes/Todo');
 var lessonRouter = require('./routes/Lesson')
-var levelTestRouter = require('./routes/LevelTest')
+var levelTestRouter = require('./routes/LevelTest');
+var examRouter = require('./routes/Exam')
 const cors = require('cors');
 var app = express();
 require('dotenv').config();
@@ -22,8 +23,9 @@ app.use('/', indexRouter);
 app.use('/etudiant', etudiantRouter);
 app.use('/program',programRouter);
 app.use('/todo',todoRouter);
-app.use('/level-test', levelTestRouter)
-app.use('/lesson', lessonRouter)
+app.use('/level-test', levelTestRouter);
+app.use('/lesson', lessonRouter);
+app.use('/exam', examRouter);
 
 
 app.use(function(req, res, next) { next(createError(404)); });
