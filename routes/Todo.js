@@ -27,39 +27,24 @@ function auth(req, res, next)
 
 router.post('/', auth, async function(req, res, next) {
     const etudiantId = req.user.id;
-    const numJour = req.body.numJour;
-    
-  
     const client = new MongoClient('mongodb+srv://tsanta:ETU001146@cluster0.6oftdrm.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true });
     await client.connect();
     const db = client.db("hiu");
+    const newTodo = {
+      date_today: new Date(req.body.date_today),
+      tache: req.body.tache,
+      isDone: req.body.isDone || "no"
+    };
   
-    // Vérifier si le nouveau programme chevauche avec un programme existant
-    const chevauchement = await db.collection("program").findOne({
-      etudiantId,
-      numJour,
-      $or: [
-        { heure_debut: { $lt: heure_debut } , heure_fin: { $gt: heure_debut } },
-        { heure_debut: { $gte: heure_debut, $lt: heure_fin } },
-        { heure_debut: { $lte: heure_debut } , heure_fin: { $gte: heure_fin } },
-        { heure_debut: { $lte: heure_debut } , heure_fin: { $gt: heure_debut, $lt: heure_fin } },
-        { heure_debut: { $gte: heure_debut, $lt: heure_fin }, heure_fin: { $gte: heure_fin } },
-      ]
-    });
+    const insertedTodo = await db.collection("todo").insertOne(newTodo);
   
-    if (chevauchement) {
-      res.status(400).json({ message: "Le nouveau programme chevauche avec un programme existant" });
-    } else {
-      const newProgram = { etudiantId, heure_debut: heure_debut, heure_fin: heure_fin, matiere, theme, numJour };
-      const result = await db.collection("program").insertOne(newProgram);
-      const insertedProgram = { id: result.insertedId, ...newProgram };
-      res.status(201).json({ program: insertedProgram, message: "Programme ajouté dans l'emploi du temps" });
-    }
+    res.status(201).json({ program: insertedTodo, message: "Todo ajouté " });
   
-     client.close();
+    client.close();
   });
-
   
+
+/*
 router.delete('/', auth, async function(req, res, next) {
     const etudiantId = req.user.id;
     const idProgram = req.body.idProgram;
@@ -161,6 +146,7 @@ router.delete('/', auth, async function(req, res, next) {
     res.status(200).json(programs);
   });
   
+  */
 
   module.exports = router;
   
