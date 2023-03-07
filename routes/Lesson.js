@@ -15,8 +15,8 @@ router.post("/generate", auth, async(req, res, next) => {
         })
     }
     try{
-        const generatedLevelTest = await lessonService.generateLessons(subject,theme)
-        res.send(generatedLevelTest)
+        const generatedLessons = await lessonService.generateLessons(subject,theme)
+        res.send(generatedLessons)
     }catch(err){
         console.log(err)
         res.status(500).json({

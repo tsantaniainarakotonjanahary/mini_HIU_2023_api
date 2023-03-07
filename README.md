@@ -71,9 +71,10 @@ fetch(url, options)
   .catch((error) => console.error(error));
 ```
 
-## Generate a list of lesson to learn for a subject based on the theme
+## Generate a list of lessons to learn for a subject based on the theme
 
 ### - DOCUMENTATION -
+
 - **URL** : https://mini-hiu-2023-api.vercel.app/lesson/generate
 - **Methode** : POST
 - **Headers**
@@ -95,25 +96,49 @@ fetch(url, options)
   ```json
   {
     "datas": [
-      "Comprendre le concept de limite",
-      "Comprendre comment les fonctions se comportent en approchant une limite",
-      "Trouver les limites numeriques d'une fonction",
-      "Trouver les limites infinies d'une fonction",
-      "Trouver les limites a l'infini d'une fonction",
-      "Comprendre les limites discontinues",
-      "Comprendre les limites infinites d'une fonction",
-      "Comprendre les limites de deux fonctions",
-      "Utiliser le theoreme de l'hopital lors du calcul des limites",
-      "Résoudre des équations avec des limites",
-      "Comprendre le concept de limite de convergence"
+      {
+        "lessonTitle": "Limites des fonctions continues",
+        "suggestedWebsites": [
+          {
+            "title": "Limites et fonctions continues",
+            "link": "http://math.univ-lyon1.fr/~frabetti/AnalyseI/CM4-limites+continue+graphes.pdf",
+            "snippet": "Opérations sur les limites de fonctions continues: Sif et g sont deux fonctions telles que g admet une limite finie en zo € Dg, i.e. lim g(x) - (ЄR, est ...",
+            "displayedLink": "http://math.univ-lyon1.fr › ~frabetti › AnalyseI"
+          },
+          {
+            "title": "Résumé de cours : limites et continuité - BibM@th",
+            "link": "https://www.bibmath.net/ressources/index.php?action=affiche&quoi=mathsup/cours/limitecontinuite.html",
+            "snippet": "On parle de continuité à droite ou de continuité à gauche lorsqu'on utilise les notions de limite à droite et de limite à gauche. On dit que f f est continue ...",
+            "displayedLink": "https://www.bibmath.net › ressources › limitecontinuite"
+          }
+        ]
+      },
+      {
+        "lessonTitle": "Limites tendant vers l'infini",
+        "suggestedWebsites": [
+          {
+            "title": "Fiche explicative de la leçon : Limites à l'infini - Nagwa",
+            "link": "https://www.nagwa.com/fr/explainers/549183454070/",
+            "snippet": "A. Limite à l'infini · Notation. On note x→+∞​lim​f(x)=+∞. · Remarque. Autrement dit, x→+∞​lim​f(x)=+∞ lorsque, pour tout réel A, l'intervalle [A;+∞[ ...",
+            "displayedLink": "https://www.nagwa.com › explainers"
+          },
+          {
+            "title": "Limites de fonctions : définitions et premières propriétés",
+            "link": "https://www.lelivrescolaire.fr/page/6473037",
+            "snippet": "On appelle « limite d'une fonction » la valeur que semble prendre cette fonction pour un réel, un intervalle, ou un signe à l'infini donnés ; cette valeur peut ...",
+            "displayedLink": "https://www.lelivrescolaire.fr › page"
+          }
+        ]
+      }
     ]
   }
   ```
+
 ### - JAVASCRIPT CODE EXAMPLE | FETCH -
 
 ```js
 const token = "<token user>";
-const url = "https://mini-hiu-2023-api.vercel.app/level-test/generate";
+const url = "https://mini-hiu-2023-api.vercel.app/lessons/generate";
 
 const options = {
   method: "POST",
