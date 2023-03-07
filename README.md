@@ -4,6 +4,8 @@
 
 ## Generate a quizz from a subject based on a theme
 
+### - DOCUMENTATION -
+
 - **URL** : https://mini-hiu-2023-api.vercel.app/level-test/generate
 - **Method** : POST
 - **Headers**
@@ -45,8 +47,33 @@
   }
   ```
 
+### - JAVASCRIPT CODE EXAMPLE | FETCH -
+
+```js
+const token = "<token user>";
+const url = "https://mini-hiu-2023-api.vercel.app/level-test/generate";
+
+const options = {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "x-auth-token": token,
+  },
+  body: JSON.stringify({
+    subject: "mathematique",
+    theme: "limite",
+  }),
+};
+
+fetch(url, options)
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error(error));
+```
+
 ## Generate a list of lesson to learn for a subject based on the theme
 
+### - DOCUMENTATION -
 - **URL** : https://mini-hiu-2023-api.vercel.app/lesson/generate
 - **Methode** : POST
 - **Headers**
@@ -65,20 +92,43 @@
   ```
 - **EX OF RESPONSE**
 
-    ```json
-    {
-        "datas": [
-            "Comprendre le concept de limite",
-            "Comprendre comment les fonctions se comportent en approchant une limite",
-            "Trouver les limites numeriques d'une fonction",
-            "Trouver les limites infinies d'une fonction",
-            "Trouver les limites a l'infini d'une fonction",
-            "Comprendre les limites discontinues",
-            "Comprendre les limites infinites d'une fonction",
-            "Comprendre les limites de deux fonctions",
-            "Utiliser le theoreme de l'hopital lors du calcul des limites",
-            "Résoudre des équations avec des limites",
-            "Comprendre le concept de limite de convergence"
-        ]
-    }
-    ```
+  ```json
+  {
+    "datas": [
+      "Comprendre le concept de limite",
+      "Comprendre comment les fonctions se comportent en approchant une limite",
+      "Trouver les limites numeriques d'une fonction",
+      "Trouver les limites infinies d'une fonction",
+      "Trouver les limites a l'infini d'une fonction",
+      "Comprendre les limites discontinues",
+      "Comprendre les limites infinites d'une fonction",
+      "Comprendre les limites de deux fonctions",
+      "Utiliser le theoreme de l'hopital lors du calcul des limites",
+      "Résoudre des équations avec des limites",
+      "Comprendre le concept de limite de convergence"
+    ]
+  }
+  ```
+### - JAVASCRIPT CODE EXAMPLE | FETCH -
+
+```js
+const token = "<token user>";
+const url = "https://mini-hiu-2023-api.vercel.app/level-test/generate";
+
+const options = {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "x-auth-token": token,
+  },
+  body: JSON.stringify({
+    subject: "mathematique",
+    theme: "limite",
+  }),
+};
+
+fetch(url, options)
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error(error));
+```
