@@ -1,11 +1,28 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-const MongoClient = require('mongodb').MongoClient;
-const ObjectId = require("mongodb").ObjectId;
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const auth = require('../authentification/auth')
+const auth = require("../authentification/auth");
+const lessonService = require('../services/LessonService')
 
-router.get('/', auth , function(req, res, next) { res.send('Lessons'); });
+router.get("/", auth, (req, res) => {
+  return res.json("LevelTest");
+});
+
+router.post("/generate", auth, async(req, res, next) => {
+    const {subject , theme} = req.body
+    if(!subject || !theme){
+        return res.status(500).json({
+            error: "Veuillez definir les champs 'subject' et 'theme' dans le corps de la requete."
+        })
+    }
+    try{
+        const generatedLevelTest = await lessonService.generateLessons(subject,theme)
+        return res.send(generatedLevelTest)
+    }catch(err){
+        console.log(err)
+        return res.status(500).json({
+            error: err.toString()
+        })
+    }
+});
 
 module.exports = router;
