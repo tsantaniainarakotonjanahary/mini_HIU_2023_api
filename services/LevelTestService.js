@@ -19,13 +19,13 @@ const generateLevelTest = async (subject, theme) => {
          etc...
        ]
     }
-    Fait en sorte que ce soit complet en ne depassant pas 2000 tokens
+    Fait en sorte que ce soit complet en ne depassant pas 2500 tokens
 `;
   try{
     const completions = await openai.createCompletion({
         model: "text-davinci-003",
         prompt: prompt,
-        max_tokens: 3000,
+        max_tokens: 2500,
       });
     
       const levelTest = JSON.parse(completions.data.choices[0].text)
