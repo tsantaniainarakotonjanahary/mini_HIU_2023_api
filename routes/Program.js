@@ -137,7 +137,7 @@ router.delete('/', auth, async function(req, res, next) {
     const cursor = await db.collection("program").find({ etudiantId });
   
     await cursor.forEach(program => {
-      programs[program.numJour].push(program);
+      programs[program.numJour] = program
     });
   
     res.status(200).json(programs);
