@@ -138,6 +138,31 @@ router.delete('/', auth, async function(req, res, next) {
   
     client.close();
   });
+
+  router.get('/', auth, async function(req, res, next) {
+    const etudiantId = req.user.id;
+    const client = new MongoClient('mongodb+srv://tsanta:ETU001146@cluster0.6oftdrm.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true });
+    await client.connect();
+    const db = client.db("hiu");
+    
+    const programs = {
+      0: [],
+      1: [],
+      2: [],
+      3: [],
+      4: [],
+      5: [],
+      6: []
+    };
+  
+    const cursor = await db.collection("program").find({ etudiantId });
+  
+    await cursor.forEach(program => {
+      programs[program.numJour].push(program);
+    });
+  
+    res.status(200).json(programs);
+  });
   
 
   module.exports = router;
