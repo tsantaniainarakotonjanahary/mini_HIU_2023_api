@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var etudiantRouter = require('./routes/Etudiant');
+var programRouter = require('./routes/Program');
 const cors = require('cors');
 var app = express();
 require('dotenv').config();
@@ -21,6 +22,7 @@ app.use(cookieParser());
 
 app.use('/', indexRouter);
 app.use('/etudiant', etudiantRouter);
+app.use('/program',programRouter);
 
 app.use(function(req, res, next) { next(createError(404)); });
 

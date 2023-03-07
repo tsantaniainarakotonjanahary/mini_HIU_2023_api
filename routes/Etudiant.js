@@ -4,9 +4,6 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require("mongodb").ObjectId;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
-
-
 
 router.get('/', auth , function(req, res, next) { res.send('Etudiant'); });
 
@@ -67,7 +64,6 @@ const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+")
 
 router.post('/register', async (req, res) => {
 
-    
     const nom = req.body.nom;
     const prenom = req.body.prenom;
     const email = req.body.email;
@@ -155,15 +151,15 @@ router.put('/update', auth, async (req, res) => {
     user.classe = req.body.classe || user.classe;
     user.tel = req.body.tel|| user.tel;
 
-if(req.body.password){ user.password = await bcrypt.hash(req.body.password, 10); }
-db.collection("etudiant").updateOne({_id: new ObjectId(req.user.id)}, { $set: user },(err, result) => {
-    if (err) {
-        console.log(err);
-        return res.status(500).json({ message: "Error updating profile" });
-    }
-    client.close();
-    res.status(200).json({ message: "Profile updated successfully" });
-  });
+    if(req.body.password){ user.password = await bcrypt.hash(req.body.password, 10); }
+    db.collection("etudiant").updateOne({_id: new ObjectId(req.user.id)}, { $set: user },(err, result) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ message: "Error updating profile" });
+        }
+        client.close();
+        res.status(200).json({ message: "Profile updated successfully" });
+    });
 });
 
 
