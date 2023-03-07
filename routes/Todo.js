@@ -63,7 +63,7 @@ router.put('/finir/:id', auth, async function(req, res, next) {
   const updatedTodo = {
       isDone: "yes"
   };
-  const result = await db.collection("todo").updateOne({ _id: ObjectId(todoId), etudiantId: etudiantId }, { $set: updatedTodo });
+  const result = await db.collection("todo").updateOne({ _id: new  ObjectId(todoId), etudiantId: etudiantId }, { $set: updatedTodo });
   if (result.modifiedCount === 0) {
       return res.status(404).json({ message: "Todo non trouvé" });
   }
@@ -94,7 +94,7 @@ router.delete('/:id', auth, async function(req, res, next) {
   await client.connect();
   const db = client.db("hiu");
   const todoId = req.params.id;
-  const result = await db.collection("todo").deleteOne({ _id: ObjectId(todoId), etudiantId: etudiantId });
+  const result = await db.collection("todo").deleteOne({ _id:  new ObjectId(todoId), etudiantId: etudiantId });
   if (result.deletedCount === 0) {
       return res.status(404).json({ message: "Todo non trouvé" });
   }
