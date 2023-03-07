@@ -31,17 +31,27 @@ router.post('/', auth, async function(req, res, next) {
     await client.connect();
     const db = client.db("hiu");
     const newTodo = {
+        etudiantId,
       date_today: new Date(req.body.date_today),
       tache: req.body.tache,
       isDone: req.body.isDone || "no"
     };
-  
     const insertedTodo = await db.collection("todo").insertOne(newTodo);
-  
     res.status(201).json({ program: insertedTodo, message: "Todo ajouté " });
-  
     client.close();
-  });
+});
+
+router.get('/:date', auth, async function(req, res, next) {
+    const etudiantId = req.user.id;
+    const client = new MongoClient('mongodb+srv://tsanta:ETU001146@cluster0.6oftdrm.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true });
+    await client.connect();
+    const db = client.db("hiu");
+    const date = new Date(req.params.date);
+    console.log(date);
+    const todos = await db.collection("todo").find({ etudiantId: etudiantId, date_today: date }).toArray();
+    res.status(200).json(todos);
+    client.close();
+});
   
 
 /*
