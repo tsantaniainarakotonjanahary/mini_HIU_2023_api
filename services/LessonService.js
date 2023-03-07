@@ -14,7 +14,7 @@ const generateLessons = async (examType, theme) => {
     const completions = await openai.createCompletion({
         model: "text-davinci-003",
         prompt: prompt,
-        max_tokens: 500,
+        max_tokens: 1000,
       });
     
       const lessonList = JSON.parse(completions.data.choices[0].text.trim())
