@@ -5,16 +5,12 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var etudiantRouter = require('./routes/Etudiant');
 var programRouter = require('./routes/Program');
+var todoRouter = require('./routes/Todo');
 const cors = require('cors');
 var app = express();
 require('dotenv').config();
 
-const fileUpload = require('express-fileupload');
-
 app.use(cors());
-
-
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -23,6 +19,7 @@ app.use(cookieParser());
 app.use('/', indexRouter);
 app.use('/etudiant', etudiantRouter);
 app.use('/program',programRouter);
+app.use('/todo',todoRouter);
 
 app.use(function(req, res, next) { next(createError(404)); });
 
