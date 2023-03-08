@@ -87,7 +87,7 @@ router.put('/:id', auth, async function(req, res, next) {
   };
   const result = await db.collection("todo").updateOne({ _id: new ObjectId(todoId), etudiantId: etudiantId }, { $set: updatedTodo });
   if (result.modifiedCount === 0) {
-      return res.status(404).json({ message: "Todo non trouvé" });
+      return res.status(404).json({ message: "Aucune modification" });
   }
   res.status(200).json({ message: "Todo mis à jour avec succès" });
   client.close();
