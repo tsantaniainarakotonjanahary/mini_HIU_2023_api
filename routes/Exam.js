@@ -6,8 +6,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const auth = require('../authentification/auth')
 
-
-
 router.post('/', auth, async function(req, res, next) {
     const etudiantId = req.user.id;
     const client = new MongoClient('mongodb+srv://tsanta:ETU001146@cluster0.6oftdrm.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true });
@@ -26,6 +24,19 @@ router.post('/', auth, async function(req, res, next) {
     res.status(201).json({ examen: insertedExam, message: "Examen ajouté" });
     client.close();
   });
+
+    // Get All Exams (where start date is in the future)
+    router.get('/', auth, async function(req, res, next) {
+        const etudiantId = req.user.id;
+        const client = new MongoClient('mongodb+srv://tsanta:ETU001146@cluster0.6oftdrm.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true });
+        await client.connect();
+        const db = client.db("hiu");
+    
+        const now = new Date(); // current date
+        const exams = await db.collection("exam").find({ etudiantId: etudiantId, date_debut: { $gt: now } }).toArray(); // filter by etudiantId and start date > current date
+        res.status(200).json({ exams });
+        client.close();
+    });
   
 
 
