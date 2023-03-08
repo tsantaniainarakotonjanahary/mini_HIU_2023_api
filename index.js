@@ -9,6 +9,7 @@ var todoRouter = require('./routes/Todo');
 var lessonRouter = require('./routes/Lesson')
 var levelTestRouter = require('./routes/LevelTest');
 var examRouter = require('./routes/Exam')
+var notificationRouter = require('./routes/Notification');
 const cors = require('cors');
 var app = express();
 require('dotenv').config();
@@ -26,6 +27,7 @@ app.use('/todo',todoRouter);
 app.use('/level-test', levelTestRouter);
 app.use('/lesson', lessonRouter);
 app.use('/exam', examRouter);
+app.use('/notification', notificationRouter);
 
 
 app.use(function(req, res, next) { next(createError(404)); });
@@ -38,7 +40,7 @@ app.use(function(err, req, res, next)
   res.render('error');
 });
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 4000;
 app.listen(port, () => console.log(` listening on port ${port}!`));
 
 module.exports = app;
