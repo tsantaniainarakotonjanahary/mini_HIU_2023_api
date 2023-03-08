@@ -14,11 +14,15 @@ const generateLevelTest = async (subject, theme) => {
            choix: [
             "choix1", "choix2", "choix3", "choix4"
            ],
-           idReponse: id du choix dans le tableau de choix (par exemple 0 pour choix1)
+           idReponse: id du choix exacte dans le tableau de choix (par exemple 0 pour choix1)
          },
          etc...
        ]
     }
+
+    Un seul choix doit etre la vrai reponse et l'index qu'il a dans le tableau doit etre
+    celui qui est inscrit dans le champs idReponse.
+    Fait en sorte que la reponse soit reellement correct.
     Fait en sorte que ce soit complet en ne depassant pas 2500 tokens
 `;
   try{
