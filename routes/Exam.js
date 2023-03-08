@@ -33,7 +33,7 @@ const auth = require('../authentification/auth')
         const db = client.db("hiu");
     
         const now = new Date(); // current date
-        const exams = await db.collection("exam").find({ etudiantId: etudiantId, date_debut: { $gt: now } }).toArray(); // filter by etudiantId and start date > current date
+        const exams = await db.collection("exam").find({ etudiantId: etudiantId, date_fin: { $gt: now } }).toArray(); // filter by etudiantId and start date > current date
         res.status(200).json({ exams });
         client.close();
     });
