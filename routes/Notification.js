@@ -53,7 +53,7 @@ const auth = require('../authentification/auth');
 }
 
 
-setInterval(sendNotifExam,60000);
+setInterval(sendNotifExam,10000);
 
 
 
