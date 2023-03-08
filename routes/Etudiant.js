@@ -110,7 +110,7 @@ router.post('/register', async (req, res) => {
 
     const token = jwt.sign({ id: insertedId }, "Tsanta", { expiresIn: 86400 });
 
-    res.status(200).json({ message: "Profile created successfully" , token  });
+    res.status(200).json({ message: "Profile created successfully" , token  , user: newEtudiant , id : insertedId });
     client.close();
 });
 
