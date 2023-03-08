@@ -13,7 +13,7 @@ router.post('/', auth, async function(req, res, next) {
     const db = client.db("hiu");
     const newTodo = {
         etudiantId,
-      date_today: new Date(req.body.date_today),
+      date_today: new Date(),
       tache: req.body.tache,
       isDone: req.body.isDone || "no"
     };
@@ -42,13 +42,13 @@ function auth(req, res, next)
     }
 }
 
-router.get('/:date', auth, async function(req, res, next) {
+router.get('/', auth, async function(req, res, next) {
     const etudiantId = req.user.id;
     const client = new MongoClient('mongodb+srv://tsanta:ETU001146@cluster0.6oftdrm.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true });
     await client.connect();
     const db = client.db("hiu");
-    const date = new Date(req.params.date);
-    console.log(date);
+    const date = new Date();
+    date.setUTCHours(0, 0, 0, 0);
     const todos = await db.collection("todo").find({ etudiantId: etudiantId, date_today: date }).toArray();
     res.status(200).json(todos);
     client.close();
