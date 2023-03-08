@@ -6,24 +6,24 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const auth = require('../authentification/auth')
 
-router.post('/', auth, async function(req, res, next) {
-    const etudiantId = req.user.id;
-    const client = new MongoClient('mongodb+srv://tsanta:ETU001146@cluster0.6oftdrm.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true });
-    await client.connect();
-    const db = client.db("hiu");
-  
-    const newExam = {
-        etudiantId,
-      date_debut: new Date(req.body.date_debut),
-      date_fin: new Date(req.body.date_fin),
-      matière: req.body.matière,
-      thème: req.body.thème
-    };
-  
-    const insertedExam = await db.collection("exam").insertOne(newExam);
-    res.status(201).json({ examen: insertedExam, message: "Examen ajouté" });
-    client.close();
-  });
+    router.post('/', auth, async function(req, res, next) {
+        const etudiantId = req.user.id;
+        const client = new MongoClient('mongodb+srv://tsanta:ETU001146@cluster0.6oftdrm.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true });
+        await client.connect();
+        const db = client.db("hiu");
+    
+        const newExam = {
+            etudiantId,
+        date_debut: new Date(req.body.date_debut),
+        date_fin: new Date(req.body.date_fin),
+        matière: req.body.matière,
+        thème: req.body.thème
+        };
+    
+        const insertedExam = await db.collection("exam").insertOne(newExam);
+        res.status(201).json({ examen: insertedExam, message: "Examen ajouté" });
+        client.close();
+    });
 
     // Get All Exams (where start date is in the future)
     router.get('/', auth, async function(req, res, next) {
@@ -37,7 +37,54 @@ router.post('/', auth, async function(req, res, next) {
         res.status(200).json({ exams });
         client.close();
     });
-  
+
+    router.delete('/:id', auth, async function(req, res, next) {
+        const etudiantId = req.user.id;
+        const examId = req.params.id;
+        const client = new MongoClient('mongodb+srv://tsanta:ETU001146@cluster0.6oftdrm.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true });
+        await client.connect();
+        const db = client.db("hiu");
+      
+        const examToDelete = await db.collection("exam").findOne({ _id: new ObjectId(examId), etudiantId: etudiantId });
+        if (!examToDelete) {
+          res.status(404).json({ message: "Examen non trouvé" });
+          client.close();
+          return;
+        }
+      
+        const result = await db.collection("exam").deleteOne({ _id: new ObjectId(examId), etudiantId: etudiantId });
+        res.status(200).json({ message: "Examen supprimé" });
+        client.close();
+      });
+
+      
+      router.put('/:id', auth, async function(req, res, next) {
+        const etudiantId = req.user.id;
+        const examId = req.params.id;
+        const client = new MongoClient('mongodb+srv://tsanta:ETU001146@cluster0.6oftdrm.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true });
+        await client.connect();
+        const db = client.db("hiu");
+      
+        const examToUpdate = await db.collection("exam").findOne({ _id: new ObjectId(examId), etudiantId: etudiantId });
+        if (!examToUpdate) {
+          res.status(404).json({ message: "Examen non trouvé" });
+          client.close();
+          return;
+        }
+      
+        const updatedExam = {
+          etudiantId,
+          date_debut: new Date(req.body.date_debut),
+          date_fin: new Date(req.body.date_fin),
+          matière: req.body.matière,
+          thème: req.body.thème
+        };
+      
+        const result = await db.collection("exam").updateOne({ _id: new ObjectId(examId), etudiantId: etudiantId }, { $set: updatedExam });
+        res.status(200).json({ message: "Examen mis à jour" });
+        client.close();
+      });
+      
 
 
 module.exports = router;
