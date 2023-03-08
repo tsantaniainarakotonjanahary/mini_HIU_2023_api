@@ -16,7 +16,7 @@ const auth = require('../authentification/auth')
             etudiantId,
         date_debut: new Date(req.body.date_debut),
         date_fin: new Date(req.body.date_fin),
-        matière: req.body.matière,
+        matiere: req.body.matiere,
         thème: req.body.thème
         };
     
@@ -76,7 +76,7 @@ const auth = require('../authentification/auth')
           etudiantId,
           date_debut: new Date(req.body.date_debut),
           date_fin: new Date(req.body.date_fin),
-          matière: req.body.matière,
+          matiere: req.body.matiere,
           thème: req.body.thème
         };
       
