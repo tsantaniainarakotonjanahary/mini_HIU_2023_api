@@ -13,6 +13,7 @@ router.post('/', auth, async function(req, res, next) {
     const db = client.db("hiu");
     var myDate = new Date();
     myDate.setHours(myDate.getHours() + 3);
+    myDate.setUTCHours(0, 0, 0, 0);
     const newTodo = {
         etudiantId,
       date_today: myDate,

@@ -16,8 +16,8 @@ router.post('/', auth, async function(req, res, next) {
   
     const newExam = {
         etudiantId,
-      date_debut: req.body.date_debut,
-      date_fin: req.body.date_fin,
+      date_debut: new Date(req.body.date_debut),
+      date_fin: new Date(req.body.date_fin),
       matière: req.body.matière,
       thème: req.body.thème
     };
@@ -26,6 +26,7 @@ router.post('/', auth, async function(req, res, next) {
     res.status(201).json({ examen: insertedExam, message: "Examen ajouté" });
     client.close();
   });
+  
 
 
 module.exports = router;
