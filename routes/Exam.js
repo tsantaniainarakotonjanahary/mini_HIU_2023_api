@@ -17,7 +17,7 @@ const auth = require('../authentification/auth')
         date_debut: new Date(req.body.date_debut),
         date_fin: new Date(req.body.date_fin),
         matiere: req.body.matiere,
-        thème: req.body.thème
+        theme: req.body.theme
         };
     
         const insertedExam = await db.collection("exam").insertOne(newExam);
@@ -77,7 +77,7 @@ const auth = require('../authentification/auth')
           date_debut: new Date(req.body.date_debut),
           date_fin: new Date(req.body.date_fin),
           matiere: req.body.matiere,
-          thème: req.body.thème
+          theme: req.body.theme
         };
       
         const result = await db.collection("exam").updateOne({ _id: new ObjectId(examId), etudiantId: etudiantId }, { $set: updatedExam });
