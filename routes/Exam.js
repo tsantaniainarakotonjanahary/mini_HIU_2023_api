@@ -49,6 +49,10 @@ const auth = require('../authentification/auth')
         const exam = await db.collection("exam").findOne({ _id: new ObjectId(examId), etudiantId: etudiantId });
         if(exam){
           res.status(200).json(exam);
+        }else{
+          res.status(400).json({
+            message: "No exam with this id exists"
+          })
         }
         client.close();
         return
