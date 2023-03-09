@@ -38,6 +38,28 @@ const auth = require('../authentification/auth')
         client.close();
     });
 
+    // Get exam by id
+    router.get('/:id', auth, async function(req, res, next) {
+      const examId = req.params.id
+      const etudiantId = req.user.id;
+      const client = new MongoClient('mongodb+srv://tsanta:ETU001146@cluster0.6oftdrm.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true });
+      await client.connect();
+      const db = client.db("hiu");
+      try{
+        const exam = await db.collection("exam").findOne({ _id: new ObjectId(examId), etudiantId: etudiantId });
+        if(exam){
+          res.status(200).json(exam);
+        }
+        client.close();
+        return
+      }catch{
+        res.status(500).json({
+          message: "Server error"
+        })
+      }
+  });
+
+    
     router.delete('/:id', auth, async function(req, res, next) {
         const etudiantId = req.user.id;
         const examId = req.params.id;
