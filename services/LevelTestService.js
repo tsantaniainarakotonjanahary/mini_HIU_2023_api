@@ -1,10 +1,9 @@
-const { api_key } = require("../config");
 const openai = require("../local-modules/openai/openaiLocal");
 
 const generateLevelTest = async (subject, theme) => {
   const prompt = `
-    Genere un fichier json bien formatté listant une serie de 10 questions avec ses reponses,
-    tel un quizz concernant la matiere ${subject} sur le theme ${theme}.
+    Genere un fichier json bien formatté listant une serie de 7 questions avec ses reponses,
+    tel un quizz sur un coté plus technique concernant la matiere ${subject} sur le theme ${theme}.
     Le format devrait etre comme suit :
     {
        datas:[
@@ -40,6 +39,7 @@ const generateLevelTest = async (subject, theme) => {
     const completions = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: prompt,
+      temperature: 0,
       max_tokens: 2500,
     });
 
