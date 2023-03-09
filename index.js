@@ -10,6 +10,7 @@ var lessonRouter = require('./routes/Lesson')
 var levelTestRouter = require('./routes/LevelTest');
 var examRouter = require('./routes/Exam')
 var notificationRouter = require('./routes/Notification');
+var forumRouter = require('./routes/Forum');
 const cors = require('cors');
 var app = express();
 require('dotenv').config();
@@ -28,6 +29,7 @@ app.use('/level-test', levelTestRouter);
 app.use('/lesson', lessonRouter);
 app.use('/exam', examRouter);
 app.use('/notification', notificationRouter);
+app.use('/forum', forumRouter);
 
 
 app.use(function(req, res, next) { next(createError(404)); });
