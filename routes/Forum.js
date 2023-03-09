@@ -100,6 +100,83 @@ router.get('/', async function(req, res, next) {
       client.close();
     }
   });
+
+  router.delete('/:id', auth, async function(req, res, next) {
+    const publicationId = req.params.id;
+    const client = new MongoClient('mongodb+srv://tsanta:ETU001146@cluster0.6oftdrm.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true });
+    try {
+      await client.connect();
+      const db = client.db("hiu");
+      const result = await db.collection('forum').deleteOne({ _id: new ObjectId(publicationId) });
+      if (result.deletedCount === 1) {
+        res.status(200).json({ message: "Publication supprimée avec succès." });
+      } else {
+        res.status(404).json({ message: "Publication introuvable." });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Une erreur est survenue lors de la suppression de la publication." });
+    } finally {
+      client.close();
+    }
+  });
+
+  router.delete('/:id/commentaires/:idCommentaire', auth, async function(req, res, next) {
+    const publicationId = req.params.id;
+    const commentaireId = req.params.idCommentaire;
+    const client = new MongoClient('mongodb+srv://tsanta:ETU001146@cluster0.6oftdrm.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true });
+    try {
+      await client.connect();
+      const db = client.db("hiu");
+      const result = await db.collection('forum').updateOne(
+        { _id: new ObjectId(publicationId) },
+        { $pull: { commentaire: { idCommentaire: new ObjectId(commentaireId) } } }
+      );
+      if (result.modifiedCount === 1) {
+        res.status(200).json({ message: "Commentaire supprimé avec succès." });
+      } else {
+        res.status(404).json({ message: "Commentaire introuvable." });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Une erreur est survenue lors de la suppression du commentaire." });
+    } finally {
+      client.close();
+    }
+  });
+
+  router.delete('/:id/commentaires/:idCommentaire/reponses/:idReponse', auth, async function(req, res, next) {
+    const etudiantId = req.user.id;
+    const publicationId = req.params.id;
+    const commentaireId = req.params.idCommentaire;
+    const reponseId = req.params.idReponse;
+    const client = new MongoClient('mongodb+srv://tsanta:ETU001146@cluster0.6oftdrm.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true });
+    try {
+        await client.connect();
+        const db = client.db("hiu");
+        const etudiant = await db.collection('etudiant').findOne({ _id:  new ObjectId(etudiantId) });
+        if (!etudiant) {
+            res.status(401).json({ message: "Etudiant introuvable" });
+            return;
+        }
+        const result = await db.collection("forum").updateOne(
+            { _id: new ObjectId(publicationId), "commentaire.idCommentaire": new ObjectId(commentaireId) },
+            { $pull: { "commentaire.$.reponse": { idReponse: new ObjectId(reponseId) } } }
+        );
+        if (result.modifiedCount === 0) {
+            res.status(404).json({ message: "Publication, commentaire ou réponse introuvable" });
+            return;
+        }
+        res.status(200).json({ message: "Réponse supprimée" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Une erreur est survenue lors de la suppression de la réponse." });
+    } finally {
+        client.close();
+    }
+});
+
+  
   
 
 
