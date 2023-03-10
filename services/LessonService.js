@@ -4,7 +4,7 @@ const { scrapGoogleSearch } = require("../services/ScrapService");
 const generateLessons = async (subject, theme) => {
   const prompt = `
     Sans mettre aucune introduction ni conclusion dans ta reponse, genere un fichier json bien formatté listant 
-    la liste des lessons que je dois maitriser pour mon examen de ${subject} sur le theme de ${theme} en suivant un ordre de priorité.
+    la liste des lessons axées sur un coté pratique que je dois maitriser pour mon examen de ${subject} sur le theme de ${theme} en suivant un ordre de priorité.
     Site les grands points. Au max 3 lessons. dans chaque lecons 2 sites suggérées chacuns.
     Le format devrait etre un peu comme suit:
     {
