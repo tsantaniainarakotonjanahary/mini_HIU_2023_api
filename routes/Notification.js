@@ -5,6 +5,9 @@ const ObjectId = require("mongodb").ObjectId;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const auth = require('../authentification/auth');
+const schedule = require('node-schedule');
+const moment = require('moment');
+
 
     const admin = require('firebase-admin');
     const privateKey1 = `-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCw2R4T4S/lumwv\nfjvtlNQYVrQo/OBTEGJTdFVn2HKHKMhp+azoLmYqw0ylZo8DZTwIZ1BFdMLKpwFl\nyPyxOjuustKWHlXIEWGEzdc96i7Ixi8RPFPH+zcHJpLrTIDXAwJ8bpEosmpmeFdV\nZKS3odvbo4H5lhDjYktfQA6yvUCMwFNsTOVbD5I16jkjtgB3/ZRf6TinvMS/rL3j\nBu1zEXoSCXZ8d46Q9WbhCr5gIfTWD3bTgISP7ZyM1Gj3OSoWQ3T9Cncwu8dOpzDA\nK9HjSOTwL4zztArH9TZrl9n36RLHIvxzgcOKHXvbECMhdkmOBM3znMTmMeqvgCwS\nzzmEQxp3AgMBAAECggEAAhdfMq78C`
@@ -22,38 +25,48 @@ const auth = require('../authentification/auth');
 
   
 
- async function sendNotifExam(req, res, next) {
-    const client = new MongoClient('mongodb+srv://tsanta:ETU001146@cluster0.6oftdrm.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true });
-    await client.connect();
-    const db = client.db("hiu");
-    const now = new Date(); 
-    const exams = await db.collection("exam").find({ date_fin: { $gt: now } }).toArray(); 
-    const clientUser = await db.collection("clientUser").find().toArray(); 
-    let today = new Date();
-    let examsToCome = [];
-    for (let i = 0; i < exams.length; i++) {
-        let examDate = new Date(exams[i].date_debut);
-        examDate.setUTCHours(0,0,0,0); 
-        console.log(examDate);
-        let timeDiff = examDate.getTime() - today.getTime(); 
-        let dayDiff = timeDiff / (1000 * 3600 * 24); 
-        if (dayDiff >= 0 && dayDiff <= 3) { 
+    async function sendNotifExam(req, res, next) {
+        const client = new MongoClient('mongodb+srv://tsanta:ETU001146@cluster0.6oftdrm.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true });
+        await client.connect();
+        const db = client.db("hiu");
+        const now = new Date(); 
+        const exams = await db.collection("exam").find({ date_fin: { $gt: now } }).toArray(); 
+        const clientUser = await db.collection("clientUser").find().toArray(); 
+        let today = new Date();
+        let examsToCome = [];
+        for (let i = 0; i < exams.length; i++) {
+          let examDate = moment(exams[i].date_fin);
+          let timeDiff = examDate.diff(moment(), 'seconds'); 
+          let remainingTime = moment.duration(timeDiff, 'seconds').humanize();
+          console.log(`Remaining time for exam ${exams[i]._id}: ${remainingTime}`);
+          let dayDiff = timeDiff / (1000 * 3600 * 24); 
+          if (dayDiff >= 0 && dayDiff <= 3) { 
             examsToCome.push(exams[i]);
+          }
         }
-    }
-    const result = examsToCome.filter(exam => clientUser.some(user => user.etudiantId === exam.etudiantId)).map(exam => ({etudiantId: exam.etudiantId, date_debut: exam.date_debut, date_fin: exam.date_fin, matiere: exam.matiere, theme: exam.theme, token: clientUser.find(user => user.etudiantId === exam.etudiantId).token}));
-    for (let i = 0; i < result.length; i++) {
-        const exam = result[i];
-        const message = { notification: { title: 'Rappel', body: `exament ${exam.matiere} sur le theme ${exam.theme}` }, token: exam.token };
-        admin.messaging().send(message).then((response) => { console.log('Successfully sent message:', response); }).catch((error) => {
+        const result = examsToCome.filter(exam => clientUser.some(user => user.etudiantId === exam.etudiantId)).map(exam => ({etudiantId: exam.etudiantId, date_debut: exam.date_debut, date_fin: exam.date_fin, matiere: exam.matiere, theme: exam.theme, token: clientUser.find(user => user.etudiantId === exam.etudiantId).token}));
+        for (let i = 0; i < result.length; i++) {
+          const exam = result[i];
+          const examDate = moment(exam.date_fin);
+          const diff = examDate.diff(moment(), 'seconds');
+          const remainingTime = moment.duration(diff, 'seconds').humanize();
+          const message = {
+            notification: {
+              title: 'Rappel',
+              body: `examen ${exam.matiere} sur le thème ${exam.theme}. Temps restant: ${remainingTime}`
+            },
+            token: exam.token
+          };
+          console.log(message);
+          admin.messaging().send(message).then((response) => { console.log('Successfully sent message:', response); }).catch((error) => {
             console.log('Error sending message:', error);
-        });
+          });
+        }
+        client.close();
     }
-    client.close();
-}
 
 
-setInterval(sendNotifExam,1800000);
+setInterval(sendNotifExam,60000);
 
 
 
