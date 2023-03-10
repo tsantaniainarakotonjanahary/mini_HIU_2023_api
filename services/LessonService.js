@@ -2,26 +2,7 @@ const openai = require("../local-modules/openai/openaiLocal");
 const { scrapGoogleSearch } = require("../services/ScrapService");
 
 const generateLessons = async (subject, theme) => {
-  const prompt = `
-    Sans mettre aucune introduction ni conclusion dans ta reponse, genere un fichier json bien formatté listant 
-    la liste des lessons axées sur un coté pratique que je dois maitriser pour mon examen de ${subject} sur le theme de ${theme} en suivant un ordre de priorité.
-    Site les grands points. Au max 3 lessons. dans chaque lecons 2 sites suggérées chacuns.
-    Le format devrait etre un peu comme suit:
-    {
-        datas:[
-          {
-            "lessonTitle":"titre leçon",
-            "suggestedWebsites":[
-              {
-                title: "Titre du site",
-                link: "lien du site",
-                snippet : "Une portion de texte du site ..."
-              }
-            ]
-          }
-        ]
-    }
-`;
+  const prompt = `Sans mettre aucune introduction ni conclusion dans ta reponse, genere un fichier json bien formatté listant la liste des lessons axées sur un coté pratique que je dois maitriser pour mon examen de ${subject} sur le theme de ${theme} en suivant un ordre de priorité. Site les grands points. Au max 3 lessons. dans chaque lecons 2 sites suggérées chacuns. Le format devrait etre un peu comme suit: { datas:[ { "lessonTitle":"titre leçon", "suggestedWebsites":[ { title: "Titre du site", link: "lien du site", snippet : "Une portion de texte du site ..." } ] } ] }`;
   try {
     const completions = await openai.createCompletion({
       model: "text-davinci-003",
