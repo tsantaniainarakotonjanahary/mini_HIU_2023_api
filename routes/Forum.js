@@ -186,6 +186,30 @@ router.get('/', async function(req, res, next) {
     }
 });
 
+router.get("/:forumId", async function (req, res, next) {
+    const { forumId } = req.params;
+    const client = new MongoClient(
+      "mongodb+srv://tsanta:ETU001146@cluster0.6oftdrm.mongodb.net/?retryWrites=true&w=majority",
+      { useUnifiedTopology: true }
+    );
+    try {
+      await client.connect();
+      const db = client.db("hiu");
+      const forums = await db
+        .collection("forum")
+        .findOne({ _id: new ObjectId(forumId) });
+      res.status(200).json(forums);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        message:
+          "Une erreur est survenue lors de la récupération des publications forum",
+      });
+    } finally {
+      client.close();
+    }
+  });
+
   
   
 
