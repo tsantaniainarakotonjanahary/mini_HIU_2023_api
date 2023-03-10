@@ -58,7 +58,10 @@ const moment = require('moment');
             token: exam.token
           };
           console.log(message);
-          admin.messaging().send(message).then((response) => { console.log('Successfully sent message:', response); }).catch((error) => {
+          admin.messaging().send(message).then(async (response) => {
+             console.log('Successfully sent message:', response);
+             const insertedClientUser = await db.collection("notification").insertOne(newClientUser); 
+         }).catch((error) => {
             console.log('Error sending message:', error);
           });
         }

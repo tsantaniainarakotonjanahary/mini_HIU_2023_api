@@ -36,7 +36,7 @@ router.post('/', auth, async function(req, res, next) {
       };
       const insertedDossier = await db.collection("dossier").insertOne(newDossier);
       res.status(201).json({ message: "Dossier créé avec succès" });
-    }  /
+    }
     client.close();
 });
 
