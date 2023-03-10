@@ -3,7 +3,7 @@ var router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require("mongodb").ObjectId;
 const auth = require('../authentification/auth');
-
+const { suggestProgramFromTodo } = require(`../services/ProgramSuggestionService`)
 
 router.post('/', auth, async function(req, res, next) {
     const etudiantId = req.user.id;
@@ -160,6 +160,16 @@ router.delete('/', auth, async function(req, res, next) {
     });
   
     res.status(200).json(programs);
+  });
+  router.post('/suggest-from-todo', auth, async function(req, res, next) {
+    const etudiantId = req.user.id
+    suggestProgramFromTodo(etudiantId).then(todos=>{
+      
+      res.json(todos)
+    }).catch(err=>{
+      console.log(err)
+      res.status(400).json({message: ""})
+    })
   });
   
 
