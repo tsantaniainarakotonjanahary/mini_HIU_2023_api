@@ -1,4 +1,3 @@
-const { api_key } = require("../config");
 const openai = require("../local-modules/openai/openaiLocal");
 
 const generateLevelTest = async (subject, theme) => {

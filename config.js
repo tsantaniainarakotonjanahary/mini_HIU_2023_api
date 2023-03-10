@@ -1,7 +1,7 @@
-const api1 = "sk-NUsFEbppY"
-const api2 = "Z1XAxWmiB5PT3"
-const api3 = "BlbkFJico3cAX"
-const api4 = "G44VDOEmOo6o5"
+const api1 = "sk-7umf4rxB"
+const api2 = "XZM2YoiEamuu"
+const api3 = "T3BlbkFJtHtye"
+const api4 = "hMkWKCqKyWLldMh"
 
 module.exports = {
     api_key: `${api1}${api2}${api3}${api4}`
