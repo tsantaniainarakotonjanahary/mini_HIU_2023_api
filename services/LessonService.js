@@ -9,9 +9,8 @@ const generateLessons = async (subject, theme) => {
       model: "text-davinci-003",
       prompt: prompt,
       max_tokens: 3000,
-      temperature: 1
+      temperature: 0.5
     });
-
     const lessonList = JSON.parse(completions.data.choices[0].text.trim())
     // console.log(completions.data.choices[0].text)
     const datas = lessonList.datas;
@@ -20,14 +19,28 @@ const generateLessons = async (subject, theme) => {
     //     error: "Erreur interne du serveur",
     //   });
     const formatedLessonsArray = [];
+    
+    // await Promise.all([someCall(), anotherCall()]);
+    const promisesArray = []
     for (let i = 0; i < datas.length; i++) {
-      const scrapedSearch = await scrapGoogleSearch(
-        `${subject} ${theme} ${datas[i].toString().trim()}`
+      const scrapedSearch = scrapGoogleSearch(
+        `${subject} ${theme} ${datas[i].toString().trim()}`,
+        3
       );
-      formatedLessonsArray.push({
-        lessonTitle: datas[i].toString(),
-        suggestedWebsites: scrapedSearch,
-      });
+      promisesArray.push(scrapedSearch)
+      // formatedLessonsArray.push({
+      //   lessonTitle: datas[i].toString(),
+      //   suggestedWebsites: scrapedSearch,
+      // });
+    }
+    const promises = await Promise.all(promisesArray);
+    for (let i = 0; i < datas.length; i++) {
+      formatedLessonsArray.push(
+        {
+          lessonTitle: datas[i].toString(),
+          suggestedWebsites: promises[i]
+        }
+      )
     }
     const newResponse = {
       datas: formatedLessonsArray,
