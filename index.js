@@ -11,6 +11,7 @@ var levelTestRouter = require('./routes/LevelTest');
 var examRouter = require('./routes/Exam')
 var notificationRouter = require('./routes/Notification');
 var forumRouter = require('./routes/Forum');
+var fileRouter = require('./routes/File');
 const cors = require('cors');
 var app = express();
 require('dotenv').config();
@@ -30,7 +31,7 @@ app.use('/lesson', lessonRouter);
 app.use('/exam', examRouter);
 app.use('/notification', notificationRouter);
 app.use('/forum', forumRouter);
-
+app.use('/file', fileRouter);
 
 app.use(function(req, res, next) { next(createError(404)); });
 
