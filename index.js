@@ -12,6 +12,8 @@ var examRouter = require('./routes/Exam')
 var notificationRouter = require('./routes/Notification');
 var forumRouter = require('./routes/Forum');
 var fileRouter = require('./routes/File');
+var badgeRouter = require('./routes/Badge');
+
 const cors = require('cors');
 var app = express();
 require('dotenv').config();
@@ -32,6 +34,7 @@ app.use('/exam', examRouter);
 app.use('/notification', notificationRouter);
 app.use('/forum', forumRouter);
 app.use('/file', fileRouter);
+app.use('/badge', badgeRouter);
 
 app.use(function(req, res, next) { next(createError(404)); });
 

@@ -60,7 +60,7 @@ const moment = require('moment');
           console.log(message);
           admin.messaging().send(message).then(async (response) => {
              console.log('Successfully sent message:', response);
-             const insertedClientUser = await db.collection("notification").insertOne(newClientUser); 
+             //const insertedClientUser = await db.collection("notification").insertOne(newClientUser); 
          }).catch((error) => {
             console.log('Error sending message:', error);
           });

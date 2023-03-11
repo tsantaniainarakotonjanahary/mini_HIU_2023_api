@@ -5,6 +5,8 @@ const ObjectId = require("mongodb").ObjectId;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const auth = require('../authentification/auth');
+const {attributeBadge} = require('../services/badgeService');
+
 
 router.post('/', auth, async function(req, res, next) {
     const etudiantId = req.user.id;
@@ -20,6 +22,7 @@ router.post('/', auth, async function(req, res, next) {
       tache: req.body.tache,
       isDone: req.body.isDone || "no"
     };
+    
     const insertedTodo = await db.collection("todo").insertOne(newTodo);
     res.status(201).json({ program: insertedTodo, message: "Todo ajouté " });
     client.close();
@@ -52,6 +55,7 @@ router.put('/finir/:id', auth, async function(req, res, next) {
   if (result.modifiedCount === 0) {
       return res.status(404).json({ message: "Todo non trouvé" });
   }
+
   res.status(200).json({ message: "Todo achevé avec succès" });
   client.close();
 });
