@@ -16,11 +16,13 @@ const attributeBadge = async (idEtudiant, idBadge) => {
         { _id: new ObjectId(idBadge) },
         { $addToSet: { etudiants: { idEtudiant: idEtudiant } } }
     );
-    if (updateResult.matchedCount !== 0) {
-        return { success: true, message: "Badge attribué avec succès" };
-    } else {
-        return { success: false, message: "Badge non trouvé" };
-    }
+    var badge = await badgeCollection.findOne({_id : new ObjectId(idBadge)});
+    console.log("------------------------");
+    console.log(badge);
+    console.log("------------------------");
+    
+    return { success: true, message: "Badge attribué avec succès" , badge };
+    
     client.close();
 };
 

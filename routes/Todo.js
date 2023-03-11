@@ -17,14 +17,24 @@ router.post('/', auth, async function(req, res, next) {
     myDate.setHours(myDate.getHours() + 3);
     myDate.setUTCHours(0, 0, 0, 0);
     const newTodo = {
-        etudiantId,
+      etudiantId,
       date_today: myDate,
       tache: req.body.tache,
       isDone: req.body.isDone || "no"
     };
     
     const insertedTodo = await db.collection("todo").insertOne(newTodo);
-    res.status(201).json({ program: insertedTodo, message: "Todo ajouté " });
+    const todos = await db.collection("todo").find({ etudiantId: etudiantId}).toArray();
+    console.log(todos.length);
+    if(todos.length == 1) {
+      const badge = await attributeBadge(etudiantId,'640bdf21b153d93d4122cdd7');
+      res.status(201).json({ program: insertedTodo, message: "Todo ajouté "  , badge });
+    } 
+    else {
+      const badge = null;
+      res.status(201).json({ program: insertedTodo, message: "Todo ajouté "  , badge});
+    }
+    
     client.close();
 });
 

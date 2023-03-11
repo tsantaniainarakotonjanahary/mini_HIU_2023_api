@@ -48,7 +48,8 @@ const moment = require('moment');
         for (let i = 0; i < result.length; i++) {
           const exam = result[i];
           const examDate = moment(exam.date_fin);
-          const diff = examDate.diff(moment(), 'seconds');
+          var diff = examDate.diff(moment(), 'seconds');
+          diff = diff -3;
           const remainingTime = moment.duration(diff, 'seconds').humanize();
           const message = {
             notification: {
@@ -69,7 +70,7 @@ const moment = require('moment');
     }
 
 
-setInterval(sendNotifExam,10000);
+setInterval(sendNotifExam,30000);
 
 
 
