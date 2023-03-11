@@ -69,7 +69,7 @@ const moment = require('moment');
     }
 
 
-setInterval(sendNotifExam,60000);
+setInterval(sendNotifExam,10000);
 
 
 
